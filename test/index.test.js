@@ -34,6 +34,23 @@ describe('SaaSquatch', function() {
       .global('_sqh'));
   });
 
+  describe('before loading', function() {
+    beforeEach(function() {
+      analytics.stub(saasquatch, 'load');
+      analytics.initialize();
+    });
+
+    it('should create window._sqh', function() {
+      analytics.assert(window._sqh instanceof Array);
+    });
+
+    it('should push init onto window._sqh upon initialization', function() {
+      analytics.deepEqual(window._sqh[0], ['init', {
+        tenant_alias: options.tenantAlias
+      }]);
+    });
+  });
+
   describe('loading', function() {
     it('should load', function(done) {
       analytics.on('ready', done);
