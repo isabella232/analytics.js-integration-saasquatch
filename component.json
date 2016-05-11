@@ -2,7 +2,7 @@
   "name": "analytics.js-integration-saasquatch",
   "repo": "segment-integrations/analytics.js-integration-saasquatch",
   "description": "The Saasquatch analytics.js integration.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
