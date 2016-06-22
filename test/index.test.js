@@ -1,11 +1,26 @@
+'use strict';
 
-var Analytics = require('analytics.js-core').constructor;
-var integration = require('analytics.js-integration');
-var sandbox = require('clear-env');
-var tester = require('analytics.js-integration-tester');
+var Analytics = require('@segment/analytics.js-core').constructor;
+var integration = require('@segment/analytics.js-integration');
+var sandbox = require('@segment/clear-env');
+var tester = require('@segment/analytics.js-integration-tester');
 var SaaSquatch = require('../lib/');
 
 describe('SaaSquatch', function() {
+  // HACK(ndhoule): Saasquatch somehow logs this error to the page after test
+  // teardown and it makes the page hang in Karma(?_?)
+  // Block it so that errors don't log to the console and fail tests
+  /* eslint-disable no-console */
+  var consoleError = console.error;
+  console.error = function(text) {
+    if ((/_sqh must be defined and initialized to use this widget/).test(text)) {
+      return;
+    }
+
+    return consoleError.apply(console, arguments);
+  };
+  /* eslint-enable no-console */
+
   var analytics;
   var saasquatch;
   var options = {
@@ -18,7 +33,7 @@ describe('SaaSquatch', function() {
     saasquatch = new SaaSquatch(options);
     analytics.use(SaaSquatch);
     analytics.use(tester);
-    analytics.add(saasquatch);
+    analytics.add(saasquatch); 
   });
 
   afterEach(function() {
@@ -26,6 +41,12 @@ describe('SaaSquatch', function() {
     analytics.reset();
     saasquatch.reset();
     sandbox();
+  });
+
+    // FIXME(wcjohnson11): This prevents an uncaught exception on page load in Firefox 44
+    // Find a better way to solve this in the long run.
+  after(function() {
+    window._sqh = [];
   });
 
   it('should have the correct settings', function() {
@@ -188,6 +209,7 @@ describe('SaaSquatch', function() {
 
     describe('#group', function() {
       beforeEach(function() {
+        analytics.stub(window, '_sqh');
         analytics.stub(window._sqh, 'push');
       });
 
