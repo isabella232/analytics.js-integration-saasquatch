@@ -33,7 +33,7 @@ describe('SaaSquatch', function() {
     saasquatch = new SaaSquatch(options);
     analytics.use(SaaSquatch);
     analytics.use(tester);
-    analytics.add(saasquatch); 
+    analytics.add(saasquatch);
   });
 
   afterEach(function() {
@@ -136,7 +136,7 @@ describe('SaaSquatch', function() {
       });
 
       it('should pass accountId', function() {
-        analytics.identify({ email: 'self@example.com', accountId: 123 });
+        analytics.identify({ email: 'self@example.com' }, { SaaSquatch: { accountId: 123 } });
         analytics.called(window._sqh.push, ['init', {
           user_id: null,
           tenant_alias: 'baz',
@@ -149,7 +149,7 @@ describe('SaaSquatch', function() {
       });
 
       it('should pass paymentProviderId', function() {
-        analytics.identify({ email: 'self@example.com', paymentProviderId: 421 });
+        analytics.identify({ email: 'self@example.com' }, { SaaSquatch: { paymentProviderId: 421 } });
         analytics.called(window._sqh.push, ['init', {
           user_id: null,
           tenant_alias: 'baz',
@@ -162,7 +162,7 @@ describe('SaaSquatch', function() {
       });
 
       it('should pass accountStatus', function() {
-        analytics.identify({ email: 'self@example.com', accountStatus: 'active' });
+        analytics.identify({ email: 'self@example.com' }, { SaaSquatch: { accountStatus: 'active' } });
         analytics.called(window._sqh.push, ['init', {
           user_id: null,
           tenant_alias: 'baz',
@@ -175,7 +175,7 @@ describe('SaaSquatch', function() {
       });
 
       it('should pass referralCode', function() {
-        analytics.identify({ email: 'self@example.com', referralCode: 789 });
+        analytics.identify({ email: 'self@example.com' }, { SaaSquatch: { referralCode: 789 } });
         analytics.called(window._sqh.push, ['init', {
           user_id: null,
           tenant_alias: 'baz',
@@ -188,7 +188,7 @@ describe('SaaSquatch', function() {
       });
 
       it('should pass referral image', function() {
-        analytics.identify(1, { referralImage: 'img' });
+        analytics.identify(1, {}, { SaaSquatch: { referralImage: 'img' } });
         analytics.called(window._sqh.push, ['init', {
           user_id: 1,
           tenant_alias: 'baz',
@@ -197,6 +197,58 @@ describe('SaaSquatch', function() {
           last_name: undefined,
           user_image: undefined,
           fb_share_image: 'img'
+        }]);
+      });
+
+      it('should pass userReferralCode', function() {
+        analytics.identify(1, {}, { SaaSquatch: { userReferralCode: 'ABCDEFG' } });
+        analytics.called(window._sqh.push, ['init', {
+          user_id: 1,
+          tenant_alias: 'baz',
+          email: undefined,
+          first_name: undefined,
+          last_name: undefined,
+          user_image: undefined,
+          user_referral_code: 'ABCDEFG'
+        }]);
+      });
+
+      it('should pass locale', function() {
+        analytics.identify(1, {}, { SaaSquatch: { locale: 'en_US' } });
+        analytics.called(window._sqh.push, ['init', {
+          user_id: 1,
+          tenant_alias: 'baz',
+          email: undefined,
+          first_name: undefined,
+          last_name: undefined,
+          user_image: undefined,
+          locale: 'en_US'
+        }]);
+      });
+
+      it('should pass mode', function() {
+        analytics.identify(1, {}, { SaaSquatch: { mode: 'EMBED' } });
+        analytics.called(window._sqh.push, ['init', {
+          user_id: 1,
+          tenant_alias: 'baz',
+          email: undefined,
+          first_name: undefined,
+          last_name: undefined,
+          user_image: undefined,
+          mode: 'EMBED'
+        }]);
+      });
+
+      it('should pass generic user traits through', function() {
+        analytics.identify(1, { title: 'Test Dummy' });
+        analytics.called(window._sqh.push, ['init', {
+          user_id: 1,
+          tenant_alias: 'baz',
+          email: undefined,
+          first_name: undefined,
+          last_name: undefined,
+          user_image: undefined,
+          title: 'Test Dummy'
         }]);
       });
 
