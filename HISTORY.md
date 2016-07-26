@@ -1,4 +1,10 @@
 
+2.1.1 / 2016-07-26
+==================
+
+  * Merge pull request #8 from segment-integrations/payment_provider_id_null
+  * Fix payment_provider_id null behavior
+
 2.1.0 / 2016-07-25
 =============
 
