@@ -161,6 +161,19 @@ describe('SaaSquatch', function() {
         }]);
       });
 
+      it('should null out paymentProviderId when passed "null"', function() {
+        analytics.identify({ email: 'self@example.com' }, { SaaSquatch: { paymentProviderId: 'null' } });
+        analytics.called(window._sqh.push, ['init', {
+          user_id: null,
+          tenant_alias: 'baz',
+          email: 'self@example.com',
+          first_name: undefined,
+          last_name: undefined,
+          user_image: undefined,
+          payment_provider_id: null
+        }]);
+      });
+
       it('should pass accountStatus', function() {
         analytics.identify({ email: 'self@example.com' }, { SaaSquatch: { accountStatus: 'active' } });
         analytics.called(window._sqh.push, ['init', {
